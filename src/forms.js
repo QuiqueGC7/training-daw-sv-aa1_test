@@ -12,7 +12,6 @@ const handleFillCountry = _.debounce((ev) => {
         let row = document.createElement('div')
         row.innerText = country
         row.onclick = selectCountry
-
         node.appendChild(row)
     }
   }, 300);
@@ -21,6 +20,16 @@ const handleFillCountry = _.debounce((ev) => {
 function validateName(event) {
     const name = event.target.value
     console.log('validate name: ' + name);
+    if (name == ''){
+        hideElementWithClassName(event.target, 'valid-feedback')
+        showElementWithClassName(event.target, 'invalid-feedback')
+    }else if (name.length <8) {
+        hideElementWithClassName(event.target, 'valid-feedback')
+        showElementWithClassName(event.target, 'invalid-feedback')
+    }else{
+        showElementWithClassName(event.target, 'valid-feedback')
+        hideElementWithClassName(event.target, 'invalid-feedback')
+    }
 
     return false
 }
@@ -31,12 +40,41 @@ function validatePassword(event) {
     // should contains at least one capital letter
     // should contains at least one number
     // otherwise, password is invalid
+    
     const password = event.target.value
+    console.log('validate password: ' + password);
+    if (password == ''){
+        hideElementWithClassName(event.target, 'valid-feedback')
+        showElementWithClassName(event.target, 'invalid-feedback')
+    }else if (password.length <8) {
+        hideElementWithClassName(event.target, 'valid-feedback')
+        showElementWithClassName(event.target, 'invalid-feedback')
+    }else if (password == password.toLowerCase){
+        hideElementWithClassName(event.target, 'valid-feedback')
+        showElementWithClassName(event.target, 'invalid-feedback')
+    }else if (password == password.toUpperCase){
+        hideElementWithClassName(event.target, 'valid-feedback')
+        showElementWithClassName(event.target, 'invalid-feedback')
+    }
+    else{
+        showElementWithClassName(event.target, 'valid-feedback')
+        hideElementWithClassName(event.target, 'invalid-feedback')
+    }
     return false
 }
 
 function validateEmail(event) {
     const email = event.target.value
+    
+    if (email == ''){
+        hideElementWithClassName(event.target, 'valid-feedback')
+        showElementWithClassName(event.target, 'invalid-feedback')
+    }else{
+        showElementWithClassName(event.target, 'valid-feedback')
+        hideElementWithClassName(event.target, 'invalid-feedback')
+    }
+    
+    
 
     return false
 }
@@ -45,11 +83,29 @@ function validateEmail(event) {
 // general register
 function register(event) {
     // check if name is fullfiled
+    validateName(event)
     // check if email is fullfiled
+    validateEmail(event)
     // check if password is fullfiled
+    validatePassword(event)
     // check if gender is selected
-    // check if checkbox with "I confirm that all data are correct" is checked
+    const gender = getElementsByClassName("btn-check")
 
+    if(gender.checked){
+        showElementWithClassName(event.target, 'valid-feedback')
+    } else {
+        showElementWithClassName(event.target, 'invalid-feedback')
+    }
+
+    // check if checkbox with "I confirm that all data are correct" is checked
+    
+    const checkbox = getElementsByClassName("form-check-input")
+
+    if(checkbox.checked){
+        showElementWithClassName(event.target, 'valid-feedback')
+    } else {
+        showElementWithClassName(event.target, 'invalid-feedback')
+    }
 
     // then, send a POST to localhost:3000/register with all the data in the body as a JSON
     fetch('http://localhost:3000/', {
